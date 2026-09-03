@@ -98,7 +98,7 @@ def get_img_mask_rec_form_dataset_info(dataset_info, ex_day = 0, base_path = './
             
             for png_path1, mask_path1 in match_list:
                 file_name = os.path.basename(png_path1)
-                temp1 = re.findall('\d+', file_name)
+                temp1 = re.findall(r'\d+', file_name)
                 fr_num = int(temp1[-1])
                 # print(fr_num)
                 
@@ -142,9 +142,8 @@ def get_img_mask_rec_form_dataset_info(dataset_info, ex_day = 0, base_path = './
 
 if __name__ == '__main__':
     
-    base_path = gdi.base_path
-    # dataset_info_all = {0: gdi.dataset0_info, 1: gdi.dataset1_info, 2: gdi.dataset2_info}    
-    dataset_info_all = {0: gdi.dataset0_info}
+    base_path = gdi.base_path    
+    dataset_info_all = {1: gdi.dataset1_info}
     
     rec_ind, prop_arr, contour_arr = list(), list(), list()    
     for ex_day, dataset_info in dataset_info_all.items():

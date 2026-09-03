@@ -19,30 +19,23 @@ import get_dataset_info as gdi
 
 plt_ind = 100
 # current attempt number to change analysis setting
-att_num = 0
+att_num = 1
 
 # extracted feature save position
-data_save_path_dict = {0:['./data_save[0]'], 1:['./data_save[1]'], 2:['./data_save[2]'], 3:['./data_save[0, 1, 2]'], 
-                       4:['./data_save[0]', './data_save[1]', './data_save[2]']}
+data_save_path_dict = { 1:['./data_save[1]'], }
 
 # feature selection information
 # numbers indicating feature numbers of each array
 feature_sel_dict = dict()
-if att_num <= 3:
+
     
-    feature_sel_dict['prop_sel'] = np.sort([8, 7, 3, 6, 4]).astype(int)
-    feature_sel_dict['prop_stand_sel'] = np.sort([]).astype(int)
-    feature_sel_dict['pca_sel'] = np.sort([]).astype(int)
-    feature_sel_dict['power_sel'] = np.sort([]).astype(int)
-    feature_sel_dict['power_norm_sel'] = np.sort([0]).astype(int)
+feature_sel_dict['prop_sel'] = np.sort([8, 7, 3, 6, 4]).astype(int)
+feature_sel_dict['prop_stand_sel'] = np.sort([]).astype(int)
+feature_sel_dict['pca_sel'] = np.sort([]).astype(int)
+feature_sel_dict['power_sel'] = np.sort([]).astype(int)
+feature_sel_dict['power_norm_sel'] = np.sort([0]).astype(int)
     
-else:
-    
-    feature_sel_dict['prop_sel'] = np.sort([8, 7,  6,]).astype(int)
-    feature_sel_dict['prop_stand_sel'] = np.sort([3,4]).astype(int)
-    feature_sel_dict['pca_sel'] = np.sort([]).astype(int)
-    feature_sel_dict['power_sel'] = np.sort([]).astype(int)
-    feature_sel_dict['power_norm_sel'] = np.sort([0]).astype(int)
+
 
 if __name__ == '__main__':
     plt.close('all')
@@ -64,12 +57,6 @@ if __name__ == '__main__':
     data_path2 = './%02d_data_mean2'%att_num
     os.makedirs(data_path2, exist_ok=True)
 
-    if len(np.unique(rec_traj[:,0]))>1:
-        data_path3 = './%02d_data_mean3'%att_num
-        os.makedirs(data_path3, exist_ok=True)
-        
-        data_path4 = './%02d_data_mean4'%att_num
-        os.makedirs(data_path4, exist_ok=True)
     
     traj_keys = DRT.rec_to_inter_keys(rec_ind[:,:4])
     fr_step = 6
@@ -133,45 +120,7 @@ if __name__ == '__main__':
             DRT.draw_label_umap_marked (umap_traj, manual_invasive_traj, save_path  = os.path.join(data_path2, '%03d_inv_'%plt_ind + data_dict['name'] + '.png'), 
                                         label_dict = {0:'Not_invasive', 1:'invasive'}, legend_on=False, title = data_dict['name'])
             
-            if len(np.unique(rec_traj[:,0]))>1:
-                uni_ex_num = np.unique(rec_traj[:,0])
-                for ex_num1 in uni_ex_num:
-                    ex_ind = rec_traj[:,0] == ex_num1
-                    cell_token_sub1, inter_key_dict_sub = DRT.cell_tokenizer(rec_traj[ex_ind,:3], return_inter= True)
-                    token_name_dict_sub = {token: gdi.get_rec_ind_title(inter_key) for token, inter_key in inter_key_dict_sub.items()}
-                    token_name_list_sub = ['ex_' + gdi.get_rec_ind_title(inter_key)[3:].replace('_','\n') for token, inter_key in inter_key_dict_sub.items()]
-                    
-                    cell_token_sub2 = -np.ones(rec_traj.shape[0], dtype = int)
-                    cell_token_sub2[ex_ind] = cell_token_sub1
-                    
-                    DRT.draw_label_umap_marked (umap_traj, cell_token_sub2, save_path  = os.path.join(data_path3, '%03d-ex%01d_type_'%(plt_ind, ex_num1) + data_dict['name'] + '.png'), 
-                                                label_dict = token_name_dict_sub, legend_on=True, title = data_dict['name'])
-                    
-                condition_dict = {'Fibrin_DMSO':[(0,0,0), (1,0,1), (2,0,3)], 
-                                  'Matrigel_DMSO':[(1,0,2)], 
-                                  'Fibrin_Dinac_1uM':[(1,1,1), (2,1,3)],
-                                  'Fibrin_Dinac_10uM':[(0,2,0), (2,2,3)],
-                                  'Fibrin_TMZ_1uM':[(1,3,1), (2,3,3)],
-                                  'Fibrin_TMZ_10uM':[(0,4,0), (2,4,3)],}
-                Ex_name_dict = {0:'Ex0', 1:'Ex1', 2:'Ex2'}
-                
-                DRT.draw_label_umap_marked (umap_traj, rec_traj[:,0], save_path  = os.path.join(data_path4, '%03d-cond%01d_type_'%(plt_ind, 0) + data_dict['name'] + '.png'), 
-                                            label_dict = Ex_name_dict, legend_on=True, title = data_dict['name'])
-                
-                for ii, (condition_name1, condition_list1) in enumerate(condition_dict.items()):
-                    
-                    cond_ind = np.stack([DRT.rec_to_ind(rec_traj, cond1) for cond1 in condition_list1], axis=1)
-                    cond_ind = np.logical_or.reduce(cond_ind, axis=1)
-                    
-                    condition_token_sub = -np.ones(rec_traj.shape[0], dtype = int)
-                    condition_token_sub[cond_ind] = rec_traj[cond_ind,0]
-                    
-                    Ex_name_dict2 = {key: value + '_' + condition_name1 for key, value in Ex_name_dict.items() if key in np.unique(rec_traj[cond_ind,0])}
-                    
-                    DRT.draw_label_umap_marked (umap_traj, condition_token_sub, save_path  = os.path.join(data_path4, '%03d-cond%01d_type_'%(plt_ind, ii+1) + data_dict['name'] + '.png'), 
-                                                label_dict = Ex_name_dict2, legend_on=True, title = data_dict['name'])
-                
-                
+
             
             plt_ind += 1
             

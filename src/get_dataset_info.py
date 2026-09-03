@@ -10,19 +10,7 @@ import os
 
 base_path = '../data'
 dataset0_info = dict()
-dataset0_info['target_path'] = ['GBM_Spheroid_20241127/*']
-dataset0_info['target_path_rec'] = ['GBM_Spheroid_20241127']
-dataset0_info['condition_str'] = {'DMSO_Control':(0,0), 'Dinac_10uM':(2,0), 'TMZ_10uM':(4,0)}
-dataset0_info['condition_str_rev'] = {value:key for key, value in dataset0_info['condition_str'].items()}
-dataset0_info['png_folder'] = 'png'
-dataset0_info['png_format'] = '????.png'
-dataset0_info['png_format_rec'] = lambda fr_num: '%04d.png'%fr_num
-dataset0_info['mask_folder'] = 'mask'    
-dataset0_info['spheroid_format'] = 'S\d+'
-dataset0_info['spheroid_format_rec'] = lambda sp_num: '_S%01d'%sp_num
-dataset0_info['exception_file'] = 'err.txt'
-dataset0_info['remove_object'] = 1000
-dataset0_info['remove_hole'] = 30000
+
 
 
 dataset1_info = dict()
@@ -34,30 +22,16 @@ dataset1_info['png_folder'] = 'png'
 dataset1_info['png_format'] = '????.png'
 dataset1_info['png_format_rec'] = lambda fr_num: '%04d.png'%fr_num
 dataset1_info['mask_folder'] = 'mask'    
-dataset1_info['spheroid_format'] = '_\d+$'
+dataset1_info['spheroid_format'] = r'_\d+$'
 dataset1_info['spheroid_format_rec'] = lambda sp_num: '_%01d'%sp_num
 dataset1_info['exception_file'] = 'err.txt'
 dataset1_info['remove_object'] = 30000
 dataset1_info['remove_hole'] = 100000
 
 
-dataset2_info = dict()
-dataset2_info['target_path'] = ['New_20250303_Data/*']
-dataset2_info['target_path_rec'] = ['New_20250303_Data']
-dataset2_info['condition_str'] = {'GBM39_Control':(0,3), 'GBM39_Dinac_1uM':(1,3), 'GBM39_Dinac_10uM':(2,3), 'GBM39_TMZ_1uM':(3,3), 'GBM39_TMZ_10uM':(4,3)}
-dataset2_info['condition_str_rev'] = {value:key for key, value in dataset2_info['condition_str'].items()}
-dataset2_info['png_folder'] = 'png'
-dataset2_info['png_format'] = '????.png'
-dataset2_info['png_format_rec'] = lambda fr_num: '%04d.png'%fr_num
-dataset2_info['mask_folder'] = 'mask'    
-dataset2_info['spheroid_format'] = '_\d+$'
-dataset2_info['spheroid_format_rec'] = lambda sp_num: '_%01d'%sp_num
-dataset2_info['exception_file'] = 'err.txt'
-dataset2_info['remove_object'] = 30000
-dataset2_info['remove_hole'] = 100000
 
 
-dataset_info_all = {0: dataset0_info, 1: dataset1_info, 2: dataset2_info}
+dataset_info_all = { 1: dataset1_info,}
 
 
 
